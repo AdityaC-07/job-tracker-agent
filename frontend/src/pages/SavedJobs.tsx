@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useApplications } from '../hooks';
 import { Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useSidebar } from '../context/SidebarContext';
 
 export function SavedJobs() {
   const { applications, isLoading, deleteApplication } = useApplications('saved');
   const [sortBy, setSortBy] = useState<'date' | 'salary'>('date');
+  const { isCollapsed } = useSidebar();
 
   const sortedApplications = [...applications].sort((a, b) => {
     if (sortBy === 'salary') {
@@ -16,13 +18,13 @@ export function SavedJobs() {
 
   const formatSalary = (min?: number, max?: number) => {
     if (!min && !max) return 'Not specified';
-    if (min && max) return `₹${min.toLocaleString('en-IN')} - ₹${max.toLocaleString('en-IN')}`;
-    if (min) return `₹${min.toLocaleString('en-IN')}+`;
-    return `Up to ₹${max?.toLocaleString('en-IN')}`;
+    if (min && max) return `$${min.toLocaleString('en-US')} - $${max.toLocaleString('en-US')}`;
+    if (min) return `$${min.toLocaleString('en-US')}+`;
+    return `Up to $${max?.toLocaleString('en-US')}`;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen bg-gray-50 pt-16 transition-all duration-300 ${isCollapsed ? 'pl-20' : 'pl-64'}`}>
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Saved Jobs</h1>
 

@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../services/api';
 import toast from 'react-hot-toast';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useSidebar } from '../context/SidebarContext';
 
 interface Job {
   _id: string;
@@ -34,6 +35,7 @@ export function JobSearch() {
   const [applyNotes, setApplyNotes] = useState('');
   const queryClient = useQueryClient();
   const itemsPerPage = 10;
+  const { isCollapsed } = useSidebar();
 
   const { data: result, isLoading, refetch } = useQuery({
     queryKey: ['jobs', { keywords, location, jobType, minSalary, maxSalary }],
@@ -131,7 +133,7 @@ export function JobSearch() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className={`min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 pt-16 transition-all duration-300 ${isCollapsed ? 'pl-20' : 'pl-64'}`}>
       {/* Search Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-6">
@@ -174,7 +176,7 @@ export function JobSearch() {
               <select
                 value={jobType}
                 onChange={(e) => setJobType(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm bg-white"
+                className="min-w-[180px] w-48 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm bg-white"
               >
                 <option value="">All Job Types</option>
                 <option value="full-time">Full-time</option>
@@ -188,7 +190,7 @@ export function JobSearch() {
                 type="number"
                 value={minSalary}
                 onChange={(e) => setMinSalary(e.target.value)}
-                placeholder="Min ₹"
+                placeholder="Min $"
                 className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm"
               />
 
@@ -196,7 +198,7 @@ export function JobSearch() {
                 type="number"
                 value={maxSalary}
                 onChange={(e) => setMaxSalary(e.target.value)}
-                placeholder="Max ₹"
+                placeholder="Max $"
                 className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm"
               />
 
@@ -482,7 +484,7 @@ export function JobSearch() {
 
 function formatSalary(min?: number, max?: number) {
   if (!min && !max) return 'Not specified';
-  if (min && max) return `₹${min.toLocaleString('en-IN')} - ₹${max.toLocaleString('en-IN')}`;
-  if (min) return `₹${min.toLocaleString('en-IN')}+`;
-  return `Up to ₹${max?.toLocaleString('en-IN')}`;
+  if (min && max) return `$${min.toLocaleString('en-US')} - $${max.toLocaleString('en-US')}`;
+  if (min) return `$${min.toLocaleString('en-US')}+`;
+  return `Up to $${max?.toLocaleString('en-US')}`;
 }
