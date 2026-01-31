@@ -21,7 +21,7 @@ export function Navbar() {
     <nav className="bg-white shadow">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         <Link to="/dashboard" className="text-2xl font-bold text-indigo-600 flex items-center gap-2">
-          🎯 Job Tracker
+          🎯 JobFlow
         </Link>
 
         {/* Desktop Menu */}
