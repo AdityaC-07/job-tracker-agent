@@ -5,11 +5,10 @@ Entry point for the Job Tracker API
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from contextlib import asynccontextmanager
 import logging
 
-from config.database import connect_db, disconnect_db, health_check
-from api.routes import users, jobs, applications, analytics
+from backend.config.database import connect_db, disconnect_db, health_check
+from backend.api.routes import users, jobs, applications, analytics
 
 # Configure logging
 logging.basicConfig(
@@ -19,37 +18,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """
-    Lifespan context manager for startup and shutdown events
-    """
-    # Startup
-    logger.info("Starting Job Tracker API...")
-    try:
-        await connect_db()
-        logger.info("Database connection established")
-    except Exception as e:
-        logger.error(f"Failed to connect to database: {e}")
-        raise
-    
-    yield
-    
-    # Shutdown
-    logger.info("Shutting down Job Tracker API...")
-    await disconnect_db()
-    logger.info("Database connection closed")
-
-
 # Create FastAPI app
 app = FastAPI(
     title="Job Tracker API",
     description="Smart Job Application Tracker with AI-powered matching and analytics",
     version="1.0.0",
-    lifespan=lifespan,
-    docs_url="/docs",
-    redoc_url="/redoc",
-    openapi_url="/openapi.json"
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json"
 )
 
 # Configure CORS
@@ -58,7 +34,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://localhost:3001",
+        "http://localhost:5173",
         "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173",
         "http://frontend:3000"
     ],
     allow_credentials=True,

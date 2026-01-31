@@ -12,16 +12,16 @@ import os
 import tempfile
 import logging
 
-from models.database import User, Education, UserPreferences
-from config.database import get_users_collection
-from auth.jwt_handler import (
+from backend.models.database import User, Education, UserPreferences
+from backend.config.database import get_users_collection
+from backend.auth.jwt_handler import (
     create_access_token, 
     hash_password, 
     verify_password, 
     get_current_user
 )
-from services.resume_parser import parse_resume
-from services.matcher import create_profile_embedding
+from backend.services.resume_parser import parse_resume
+from backend.services.matcher import create_profile_embedding
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/users", tags=["Users"])

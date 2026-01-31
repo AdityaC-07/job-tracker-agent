@@ -16,11 +16,7 @@ export function useAuth() {
 
   const login = async (email: string, password: string) => {
     try {
-      const formData = new URLSearchParams();
-      formData.append('username', email);
-      formData.append('password', password);
-
-      const response = await apiClient.login(formData as any);
+      const response = await apiClient.login(email, password);
       const { access_token, user: userData } = response.data;
 
       localStorage.setItem('access_token', access_token);

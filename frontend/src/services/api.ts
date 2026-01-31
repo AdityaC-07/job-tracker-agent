@@ -147,10 +147,15 @@ export const apiClient = {
   register: (data: { email: string; name: string; password: string }) =>
     api.post('/api/users/register', data),
   
-  login: (data: { username: string; password: string }) =>
-    api.post('/api/users/login', data, {
+  login: (email: string, password: string) => {
+    const formData = new URLSearchParams();
+    formData.append('username', email);
+    formData.append('password', password);
+
+    return api.post('/api/users/login', formData, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    }),
+    });
+  },
   
   // User
   getMe: () => api.get<User>('/api/users/me'),

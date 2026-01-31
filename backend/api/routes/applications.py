@@ -9,11 +9,11 @@ from bson import ObjectId
 from datetime import datetime, timedelta
 import logging
 
-from models.database import Application, ApplicationStatus, InterviewRound
-from config.database import get_applications_collection, get_jobs_collection, get_users_collection
-from auth.jwt_handler import get_current_user
-from services.watsonx_service import generate_cover_letter, suggest_next_actions
-from services.matcher import calculate_match_score
+from backend.models.database import Application, ApplicationStatus, InterviewRound
+from backend.config.database import get_applications_collection, get_jobs_collection, get_users_collection
+from backend.auth.jwt_handler import get_current_user
+from backend.services.watsonx_service import generate_cover_letter, suggest_next_actions
+from backend.services.matcher import calculate_match_score
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/applications", tags=["Applications"])
