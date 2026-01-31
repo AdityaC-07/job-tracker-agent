@@ -10,14 +10,14 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import logging
 
-from backend.config.database import (
+from config.database import (
     get_applications_collection,
     get_jobs_collection,
     get_users_collection,
     get_insights_collection
 )
-from backend.auth.jwt_handler import get_current_user
-from backend.services.matcher import analyze_skill_gap
+from auth.jwt_handler import get_current_user
+from services.matcher import analyze_skill_gap
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/analytics", tags=["Analytics"])

@@ -8,8 +8,8 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 import logging
 
-from backend.config.database import connect_db, disconnect_db, health_check
-from backend.api.routes import users, jobs, applications, analytics
+from config.database import connect_db, disconnect_db, health_check
+from api.routes import users, jobs, applications, analytics
 
 # Configure logging
 logging.basicConfig(
@@ -47,9 +47,9 @@ app = FastAPI(
     description="Smart Job Application Tracker with AI-powered matching and analytics",
     version="1.0.0",
     lifespan=lifespan,
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
 
 # Configure CORS

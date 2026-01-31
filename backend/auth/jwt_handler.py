@@ -29,6 +29,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/users/login")
 def hash_password(password: str) -> str:
     """
     Hash a plain text password using bcrypt
+    Truncates password to 72 bytes (bcrypt max) before hashing
     
     Args:
         password: Plain text password
@@ -36,12 +37,15 @@ def hash_password(password: str) -> str:
     Returns:
         Hashed password string
     """
-    return pwd_context.hash(password)
+    # Truncate to 72 bytes (bcrypt limit)
+    truncated_password = password[:72]
+    return pwd_context.hash(truncated_password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verify a plain text password against a hashed password
+    Truncates password to 72 bytes (bcrypt max) before verification
     
     Args:
         plain_password: Plain text password to verify
@@ -50,7 +54,9 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         True if password matches, False otherwise
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    # Truncate to 72 bytes (bcrypt limit) to match hashing
+    truncated_password = plain_password[:72]
+    return pwd_context.verify(truncated_password, hashed_password)
 
 
 def create_access_token(user_id: str, expires_delta: Optional[timedelta] = None) -> str:

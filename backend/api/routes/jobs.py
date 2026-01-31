@@ -9,16 +9,16 @@ from bson import ObjectId
 from datetime import datetime
 import logging
 
-from backend.models.database import JobPosting
-from backend.config.database import get_jobs_collection
-from backend.auth.jwt_handler import get_current_user, get_current_user_optional
-from backend.services.job_api_service import aggregate_from_all_sources
-from backend.services.matcher import (
+from models.database import JobPosting
+from config.database import get_jobs_collection
+from auth.jwt_handler import get_current_user, get_current_user_optional
+from services.job_api_service import aggregate_from_all_sources
+from services.matcher import (
     create_job_embedding, 
     find_matching_jobs,
     batch_create_job_embeddings
 )
-from backend.config.database import get_users_collection
+from config.database import get_users_collection
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/jobs", tags=["Jobs"])

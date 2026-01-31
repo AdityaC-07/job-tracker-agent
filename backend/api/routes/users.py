@@ -12,16 +12,16 @@ import os
 import tempfile
 import logging
 
-from backend.models.database import User, Education, UserPreferences
-from backend.config.database import get_users_collection
-from backend.auth.jwt_handler import (
+from models.database import User, Education, UserPreferences
+from config.database import get_users_collection
+from auth.jwt_handler import (
     create_access_token, 
     hash_password, 
     verify_password, 
     get_current_user
 )
-from backend.services.resume_parser import parse_resume
-from backend.services.matcher import create_profile_embedding
+from services.resume_parser import parse_resume
+from services.matcher import create_profile_embedding
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -326,7 +326,7 @@ async def get_user_stats(current_user_id: str = Depends(get_current_user)):
     Get user's application statistics
     """
     try:
-        from backend.config.database import get_applications_collection
+        from config.database import get_applications_collection
         
         applications_collection = await get_applications_collection()
         users_collection = await get_users_collection()
