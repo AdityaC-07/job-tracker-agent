@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import { LogOut, Menu, X, Heart, Briefcase } from 'lucide-react';
+import { LogOut, Menu, X, Heart, Briefcase, BarChart3 } from 'lucide-react';
 import { useState } from 'react';
 
 export function Navbar() {
@@ -54,7 +54,7 @@ export function Navbar() {
             to="/analytics"
             className="text-gray-700 hover:text-indigo-600 font-medium flex items-center gap-1"
           >
-            📊 Analytics
+            <BarChart3 size={20} /> Analytics
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-gray-600 text-sm">{user?.name}</span>
@@ -113,7 +113,7 @@ export function Navbar() {
               className="block px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg"
               onClick={() => setIsOpen(false)}
             >
-              📊 Analytics
+              <BarChart3 size={18} className="inline mr-2" />Analytics
             </Link>
             <button
               onClick={() => {
