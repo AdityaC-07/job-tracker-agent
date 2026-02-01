@@ -151,8 +151,8 @@ export function JobSearch() {
                   type="text"
                   value={keywords}
                   onChange={(e) => setKeywords(e.target.value)}
-                  placeholder="🔍 Job title, company or key words..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm shadow-sm"
+                  placeholder="Job title, company or keywords..."
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm shadow-sm"
                 />
               </div>
 
@@ -161,15 +161,15 @@ export function JobSearch() {
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder="📍 Location"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm shadow-sm"
+                  placeholder="Location"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm shadow-sm"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transition-all text-sm"
+                className="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transition-all text-sm"
               >
                 {isLoading ? 'Searching...' : 'Search'}
               </button>
@@ -180,7 +180,7 @@ export function JobSearch() {
               <select
                 value={jobType}
                 onChange={(e) => setJobType(e.target.value)}
-                className="min-w-[180px] w-48 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm bg-white"
+                className="min-w-[180px] w-48 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-sm bg-white"
               >
                 <option value="">All Job Types</option>
                 <option value="full-time">Full-time</option>
@@ -195,7 +195,7 @@ export function JobSearch() {
                 value={minSalary}
                 onChange={(e) => setMinSalary(e.target.value)}
                 placeholder="Min $"
-                className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm"
+                className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-sm"
               />
 
               <input
@@ -203,7 +203,7 @@ export function JobSearch() {
                 value={maxSalary}
                 onChange={(e) => setMaxSalary(e.target.value)}
                 placeholder="Max $"
-                className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm"
+                className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-sm"
               />
 
               <button
@@ -230,7 +230,7 @@ export function JobSearch() {
         {isLoading && (
           <div className="text-center py-20">
             <div className="inline-block">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600"></div>
+              <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600"></div>
             </div>
             <p className="mt-4 text-gray-600 text-lg">Finding the best jobs for you...</p>
           </div>
@@ -238,7 +238,7 @@ export function JobSearch() {
 
         {hasSearched && !isLoading && jobs.length === 0 && (
           <div className="text-center py-20 bg-white rounded-2xl shadow-sm">
-            <div className="text-6xl mb-4">🔍</div>
+            <div className="text-6xl mb-4 text-primary-500">◯</div>
             <p className="text-gray-600 text-xl font-semibold">No jobs found</p>
             <p className="text-gray-500 mt-2">Try adjusting your search criteria</p>
           </div>
@@ -250,7 +250,7 @@ export function JobSearch() {
             <div className="mb-6 flex justify-between items-center">
               <div>
                 <p className="text-gray-900 font-semibold text-lg">
-                  <span className="text-indigo-600">{sortedJobs.length}</span> Jobs Found
+                  <span className="text-primary-600">{sortedJobs.length}</span> Jobs Found
                 </p>
                 {sortedJobs.length > itemsPerPage && (
                   <p className="text-sm text-gray-500 mt-1">
@@ -265,7 +265,7 @@ export function JobSearch() {
                     setSortBy(e.target.value as any);
                     setCurrentPage(1);
                   }}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none bg-white"
                 >
                   <option value="relevance">⭐ Best Match</option>
                   <option value="salary">💰 Highest Salary</option>
@@ -279,7 +279,7 @@ export function JobSearch() {
               {paginatedJobs.map((job, index) => (
                 <div
                   key={job.id}
-                  className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-indigo-200 relative group"
+                  className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-200 relative group"
                 >
                   {/* Top Badge */}
                   {job.match_score && job.match_score > 80 && (
@@ -303,26 +303,26 @@ export function JobSearch() {
                   </button>
 
                   {/* Company Avatar */}
-                  <div className="bg-gradient-to-br from-indigo-500 to-purple-600 h-20 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-2xl font-bold text-indigo-600 shadow-lg">
+                  <div className="bg-gradient-to-br from-primary-500 to-primary-700 h-20 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-2xl font-bold text-primary-600 shadow-lg">
                       {job.company.charAt(0).toUpperCase()}
                     </div>
                   </div>
 
                   <div className="p-5">
                     {/* Job Title */}
-                    <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-indigo-600 transition-colors">
+                    <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-primary-600 transition-colors">
                       {job.title}
                     </h3>
                     <p className="text-gray-600 text-sm mb-3">{job.company}</p>
 
                     {/* Badges */}
                     <div className="flex flex-wrap gap-2 mb-4">
-                      <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium border border-blue-100">
-                        📍 {job.location}
+                      <span className="px-3 py-1 bg-primary-50 text-primary-700 rounded-lg text-xs font-medium border border-primary-100">
+                        {job.location}
                       </span>
                       {job.job_type && (
-                        <span className="px-3 py-1 bg-purple-50 text-purple-700 rounded-lg text-xs font-medium border border-purple-100">
+                        <span className="px-3 py-1 bg-primary-50 text-primary-700 rounded-lg text-xs font-medium border border-primary-100">
                           {job.job_type}
                         </span>
                       )}
@@ -330,14 +330,14 @@ export function JobSearch() {
 
                     {/* Match Score */}
                     {job.match_score && (
-                      <div className="mb-4 p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-100">
+                      <div className="mb-4 p-3 bg-gradient-to-r from-primary-50 to-primary-50 rounded-lg border border-primary-100">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-green-700 font-medium">Match Score</span>
-                          <span className="text-lg font-bold text-green-600">{Math.round(job.match_score)}%</span>
+                          <span className="text-xs text-primary-700 font-medium">Match Score</span>
+                          <span className="text-lg font-bold text-primary-600">{Math.round(job.match_score)}%</span>
                         </div>
-                        <div className="mt-2 w-full bg-green-200 rounded-full h-1.5">
+                        <div className="mt-2 w-full bg-primary-200 rounded-full h-1.5">
                           <div
-                            className="bg-green-600 h-1.5 rounded-full transition-all"
+                            className="bg-primary-600 h-1.5 rounded-full transition-all"
                             style={{ width: `${job.match_score}%` }}
                           ></div>
                         </div>
@@ -347,7 +347,7 @@ export function JobSearch() {
                     {/* Salary */}
                     {(job.salary_min || job.salary_max) && (
                       <p className="text-gray-900 font-bold mb-3 flex items-center gap-2">
-                        <span className="text-green-600">💰</span>
+                        <span className="text-primary-600">💰</span>
                         {formatSalary(job.salary_min, job.salary_max)}
                       </p>
                     )}
@@ -364,7 +364,7 @@ export function JobSearch() {
                       <button
                         onClick={() => handleApplyClick(job.id)}
                         disabled={createApplicationMutation.isPending}
-                        className="flex-1 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 font-semibold text-sm shadow-md hover:shadow-lg transition-all"
+                        className="flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 font-semibold text-sm shadow-md hover:shadow-lg transition-all"
                       >
                         Apply Now
                       </button>
@@ -372,7 +372,7 @@ export function JobSearch() {
                         href={job.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-2.5 border-2 border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 font-semibold text-sm transition-all"
+                        className="px-4 py-2.5 border-2 border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 font-semibold text-sm transition-all"
                       >
                         View
                       </a>
@@ -417,7 +417,7 @@ export function JobSearch() {
                         onClick={() => setCurrentPage(pageNum)}
                         className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                           currentPage === pageNum
-                            ? 'bg-indigo-600 text-white shadow-lg'
+                            ? 'bg-primary-600 text-white shadow-lg'
                             : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
                         }`}
                       >
@@ -456,7 +456,7 @@ export function JobSearch() {
                 value={applyNotes}
                 onChange={(e) => setApplyNotes(e.target.value)}
                 placeholder="Why are you a great fit for this role?"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 outline-none text-sm"
                 rows={4}
               />
             </div>
@@ -464,7 +464,7 @@ export function JobSearch() {
               <button
                 onClick={handleApplySubmit}
                 disabled={createApplicationMutation.isPending}
-                className="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 font-semibold shadow-lg"
+                className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-50 font-semibold shadow-lg"
               >
                 {createApplicationMutation.isPending ? 'Applying...' : 'Submit Application'}
               </button>

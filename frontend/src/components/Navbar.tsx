@@ -22,7 +22,7 @@ export function Navbar() {
       {/* Top Bar */}
       <nav className="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 right-0 z-30">
         <div className="px-6 py-4 flex justify-between items-center">
-          <Link to="/dashboard" className="text-2xl font-bold text-indigo-600 flex items-center gap-2">
+          <Link to="/dashboard" className="text-2xl font-bold text-primary-600 flex items-center gap-2">
             JobFlow
           </Link>
 
@@ -47,7 +47,7 @@ export function Navbar() {
         {/* Toggle Button */}
         <button
           onClick={toggleSidebar}
-          className="absolute -right-3 top-6 bg-indigo-600 text-white rounded-full p-1 shadow-lg hover:bg-indigo-700"
+          className="absolute -right-3 top-6 bg-primary-600 text-white rounded-full p-1 shadow-lg hover:bg-primary-700"
         >
           {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
@@ -56,7 +56,7 @@ export function Navbar() {
         <nav className="px-4 py-6 space-y-2">
           <Link
             to="/dashboard"
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors font-medium"
           >
             <LayoutDashboard size={22} />
             {!isCollapsed && <span>Dashboard</span>}
@@ -64,7 +64,7 @@ export function Navbar() {
 
           <Link
             to="/jobs"
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors font-medium"
           >
             <Search size={22} />
             {!isCollapsed && <span>Search Jobs</span>}
@@ -72,7 +72,7 @@ export function Navbar() {
 
           <Link
             to="/saved-jobs"
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors font-medium"
           >
             <Heart size={22} />
             {!isCollapsed && <span>Saved Jobs</span>}
@@ -80,7 +80,7 @@ export function Navbar() {
 
           <Link
             to="/applications"
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors font-medium"
           >
             <Briefcase size={22} />
             {!isCollapsed && <span>Applications</span>}
@@ -88,7 +88,7 @@ export function Navbar() {
 
           <Link
             to="/analytics"
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors font-medium"
           >
             <BarChart3 size={22} />
             {!isCollapsed && <span>Analytics</span>}
@@ -102,7 +102,7 @@ export function Navbar() {
 
           <Link
             to="/resume"
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors font-medium"
           >
             <FileText size={22} />
             {!isCollapsed && <span>Resume</span>}
@@ -110,7 +110,7 @@ export function Navbar() {
 
           <Link
             to="/interview-prep"
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors font-medium"
           >
             <Sparkles size={22} />
             {!isCollapsed && <span>Interview Prep</span>}

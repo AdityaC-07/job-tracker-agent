@@ -31,7 +31,7 @@ export function SavedJobs() {
         {isLoading && (
           <div className="text-center py-12">
             <div className="inline-block">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
             </div>
             <p className="mt-4 text-gray-600">Loading saved jobs...</p>
           </div>
@@ -50,14 +50,14 @@ export function SavedJobs() {
           <>
             <div className="mb-6 flex justify-between items-center">
               <p className="text-gray-600">
-                <span className="font-bold text-indigo-600">{sortedApplications.length}</span> saved jobs
+                <span className="font-bold text-primary-600">{sortedApplications.length}</span> saved jobs
               </p>
               <div>
                 <label className="text-sm font-medium text-gray-700 mr-2">Sort by:</label>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none"
                 >
                   <option value="date">Most Recent</option>
                   <option value="salary">Highest Salary</option>
@@ -77,18 +77,18 @@ export function SavedJobs() {
                       <p className="text-gray-600">{app.job?.company}</p>
                     </div>
                     {app.match_score && (
-                      <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full">
-                        <span className="text-green-700 font-bold">{Math.round(app.match_score)}%</span>
+                      <div className="flex items-center justify-center w-12 h-12 bg-primary-100 rounded-full">
+                        <span className="text-primary-700 font-bold">{Math.round(app.match_score)}%</span>
                       </div>
                     )}
                   </div>
 
                   <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                      📍 {app.job?.location}
+                    <span className="inline-block px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm">
+                      {app.job?.location}
                     </span>
                     {app.job?.job_type && (
-                      <span className="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
+                      <span className="inline-block px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm">
                         {app.job?.job_type}
                       </span>
                     )}
@@ -111,7 +111,7 @@ export function SavedJobs() {
 
                   {app.notes && (
                     <p className="text-gray-700 text-sm mb-3 p-3 bg-gray-50 rounded italic">
-                      📝 {app.notes}
+                      {app.notes}
                     </p>
                   )}
 
@@ -120,7 +120,7 @@ export function SavedJobs() {
                       href={app.job?.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium text-center"
+                      className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium text-center"
                     >
                       View Job →
                     </a>
@@ -129,7 +129,7 @@ export function SavedJobs() {
                         deleteApplication(app.id);
                         toast.success('Removed from saved');
                       }}
-                      className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 font-medium flex items-center gap-2"
+                      className="px-4 py-2 border border-primary-300 text-primary-600 rounded-lg hover:bg-primary-50 font-medium flex items-center gap-2"
                     >
                       <Trash2 size={18} />
                       Remove

@@ -54,7 +54,7 @@ export function AIFeatureModal({ isOpen, onClose, title, content, isLoading }: A
         <div className="flex-1 overflow-y-auto p-6">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+              <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
               <span className="ml-3 text-gray-600">Generating with AI...</span>
             </div>
           ) : (
@@ -79,7 +79,7 @@ export function AIFeatureModal({ isOpen, onClose, title, content, isLoading }: A
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-green-600" />
+                  <Check className="w-4 h-4 text-primary-600" />
                   <span>Copied!</span>
                 </>
               ) : (
@@ -91,7 +91,7 @@ export function AIFeatureModal({ isOpen, onClose, title, content, isLoading }: A
             </button>
             <button
               onClick={handleDownload}
-              className="flex items-center gap-2 px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Download className="w-4 h-4" />
               <span>Download</span>

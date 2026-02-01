@@ -28,28 +28,28 @@ export function Dashboard() {
       title: 'Total Applications',
       value: dashboardStats.total_applications,
       icon: Briefcase,
-      color: 'bg-blue-500',
+      color: 'bg-primary-500',
       change: '+12%',
     },
     {
       title: 'Active',
       value: dashboardStats.active_applications,
       icon: TrendingUp,
-      color: 'bg-green-500',
+      color: 'bg-primary-500',
       change: '+8%',
     },
     {
       title: 'Interviews',
       value: dashboardStats.interviews,
       icon: Calendar,
-      color: 'bg-purple-500',
+      color: 'bg-primary-500',
       change: '+23%',
     },
     {
       title: 'Offers',
       value: dashboardStats.offers,
       icon: CheckCircle,
-      color: 'bg-emerald-500',
+      color: 'bg-primary-500',
       change: '+15%',
     },
   ];
@@ -96,7 +96,7 @@ export function Dashboard() {
                     <div className={`${stat.color} p-3 rounded-xl`}>
                       <Icon className="text-white" size={24} />
                     </div>
-                    <span className="text-sm text-green-600 font-semibold">{stat.change}</span>
+                    <span className="text-sm text-primary-600 font-semibold">{stat.change}</span>
                   </div>
                   <h3 className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</h3>
                   <p className="text-sm text-gray-600">{stat.title}</p>
@@ -115,7 +115,7 @@ export function Dashboard() {
               <div className="flex-1">
                 <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-green-500 to-emerald-500 transition-all"
+                    className="h-full bg-gradient-to-r from-primary-500 to-primary-700 transition-all"
                     style={{ width: `${dashboardStats.success_rate}%` }}
                   ></div>
                 </div>
@@ -130,7 +130,7 @@ export function Dashboard() {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <h3 className="text-lg font-bold text-gray-900 mb-4">Avg Response Time</h3>
             <div className="flex items-center gap-3">
-              <Calendar className="text-indigo-600" size={32} />
+              <Calendar className="text-primary-600" size={32} />
               <div>
                 <p className="text-3xl font-bold text-gray-900">
                   {dashboardStats.avg_response_time_days || 0}
@@ -145,20 +145,20 @@ export function Dashboard() {
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
           <h3 className="text-lg font-bold text-gray-900 mb-6">Application Status</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-xl border border-blue-100">
-              <p className="text-2xl font-bold text-blue-600">{dashboardStats.applied}</p>
+            <div className="text-center p-4 bg-primary-50 rounded-xl border border-primary-100">
+              <p className="text-2xl font-bold text-primary-600">{dashboardStats.applied}</p>
               <p className="text-sm text-gray-600">Applied</p>
             </div>
-            <div className="text-center p-4 bg-purple-50 rounded-xl border border-purple-100">
-              <p className="text-2xl font-bold text-purple-600">{dashboardStats.interviews}</p>
+            <div className="text-center p-4 bg-primary-50 rounded-xl border border-primary-100">
+              <p className="text-2xl font-bold text-primary-600">{dashboardStats.interviews}</p>
               <p className="text-sm text-gray-600">Interviews</p>
             </div>
-            <div className="text-center p-4 bg-green-50 rounded-xl border border-green-100">
-              <p className="text-2xl font-bold text-green-600">{dashboardStats.offers}</p>
+            <div className="text-center p-4 bg-primary-50 rounded-xl border border-primary-100">
+              <p className="text-2xl font-bold text-primary-600">{dashboardStats.offers}</p>
               <p className="text-sm text-gray-600">Offers</p>
             </div>
-            <div className="text-center p-4 bg-red-50 rounded-xl border border-red-100">
-              <p className="text-2xl font-bold text-red-600">{dashboardStats.rejected}</p>
+            <div className="text-center p-4 bg-primary-50 rounded-xl border border-primary-100">
+              <p className="text-2xl font-bold text-primary-600">{dashboardStats.rejected}</p>
               <p className="text-sm text-gray-600">Rejected</p>
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-xl border border-gray-200">

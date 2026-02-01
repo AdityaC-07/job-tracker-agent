@@ -13,7 +13,7 @@ export function AIInsights() {
 
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl shadow-xl p-6 animate-pulse">
+      <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-xl p-6 animate-pulse">
         <div className="h-6 bg-white/20 rounded w-1/3 mb-4"></div>
         <div className="h-4 bg-white/20 rounded w-2/3 mb-2"></div>
         <div className="h-4 bg-white/20 rounded w-1/2"></div>
@@ -24,7 +24,7 @@ export function AIInsights() {
   if (!insights) return null;
 
   return (
-    <div className="bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl shadow-xl p-6 text-white">
+    <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-xl p-6 text-white">
       <div className="flex items-center gap-3 mb-6">
         <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
           <Sparkles className="w-6 h-6" />

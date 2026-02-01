@@ -70,33 +70,33 @@ export function Applications() {
       const content = (
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-bold mb-3 text-gray-900">📝 Common Interview Questions</h3>
+            <h3 className="text-lg font-bold mb-3 text-primary-900">Common Interview Questions</h3>
             <ul className="space-y-2">
               {prep?.common_questions?.map((q: string, i: number) => (
                 <li key={i} className="flex items-start gap-2 text-gray-700">
-                  <span className="text-blue-600 font-bold">{i + 1}.</span>
+                  <span className="text-primary-600 font-bold">{i + 1}.</span>
                   <span>{q}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-3 text-gray-900">💡 Interview Tips</h3>
+            <h3 className="text-lg font-bold mb-3 text-primary-900">Interview Tips</h3>
             <ul className="space-y-2">
               {prep?.tips?.map((tip: string, i: number) => (
                 <li key={i} className="flex items-start gap-2 text-gray-700">
-                  <span className="text-green-600">✓</span>
+                  <span className="text-primary-600">•</span>
                   <span>{tip}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-3 text-gray-900">✅ Preparation Checklist</h3>
+            <h3 className="text-lg font-bold mb-3 text-primary-900">Preparation Checklist</h3>
             <ul className="space-y-2">
               {prep?.preparation_checklist?.map((item: string, i: number) => (
                 <li key={i} className="flex items-start gap-2 text-gray-700">
-                  <span className="text-purple-600">□</span>
+                  <span className="text-primary-600">■</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -106,7 +106,7 @@ export function Applications() {
       );
       setModalState({
         isOpen: true,
-        title: '🎯 Interview Preparation Guide',
+        title: 'Interview Preparation Guide',
         content: content,
         isLoading: false,
       });
@@ -124,17 +124,17 @@ export function Applications() {
       const content = (
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-bold mb-3 text-gray-900">📊 Match Score</h3>
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-lg text-center">
+            <h3 className="text-lg font-bold mb-3 text-primary-900">Match Score</h3>
+            <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white p-4 rounded-lg text-center">
               <div className="text-4xl font-bold">{analysis?.match_percentage || 0}%</div>
               <div className="text-sm opacity-90">Skills Match</div>
             </div>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-3 text-gray-900">✅ Matching Skills</h3>
+            <h3 className="text-lg font-bold mb-3 text-primary-900">Matching Skills</h3>
             <div className="flex flex-wrap gap-2">
               {analysis?.matching_skills?.map((skill: string, i: number) => (
-                <span key={i} className="px-3 py-1 bg-green-100 text-green-800 rounded-lg text-sm font-medium">
+                <span key={i} className="px-3 py-1 bg-primary-100 text-primary-800 rounded-lg text-sm font-medium">
                   {skill}
                 </span>
               ))}
@@ -142,7 +142,7 @@ export function Applications() {
           </div>
           {analysis?.missing_skills?.length > 0 && (
             <div>
-              <h3 className="text-lg font-bold mb-3 text-gray-900">📚 Skills to Learn</h3>
+              <h3 className="text-lg font-bold mb-3 text-primary-900">Skills to Learn</h3>
               <div className="flex flex-wrap gap-2">
                 {analysis?.missing_skills?.map((skill: string, i: number) => (
                   <span key={i} className="px-3 py-1 bg-orange-100 text-orange-800 rounded-lg text-sm font-medium">
@@ -162,7 +162,7 @@ export function Applications() {
       );
       setModalState({
         isOpen: true,
-        title: '🎯 Job Requirements Analysis',
+        title: 'Job Requirements Analysis',
         content: content,
         isLoading: false,
       });
@@ -180,11 +180,11 @@ export function Applications() {
       const content = (
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-bold mb-3 text-gray-900">✨ Optimization Suggestions</h3>
+            <h3 className="text-lg font-bold mb-3 text-primary-900">Optimization Suggestions</h3>
             <ul className="space-y-2">
               {data?.suggestions?.map((item: string, i: number) => (
                 <li key={i} className="flex items-start gap-2 text-gray-700">
-                  <span className="text-blue-600 font-bold">{i + 1}.</span>
+                  <span className="text-primary-600 font-bold">{i + 1}.</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -192,10 +192,10 @@ export function Applications() {
           </div>
           {data?.keywords_to_add?.length > 0 && (
             <div>
-              <h3 className="text-lg font-bold mb-3 text-gray-900">🔑 Keywords to Add</h3>
+              <h3 className="text-lg font-bold mb-3 text-primary-900">Keywords to Add</h3>
               <div className="flex flex-wrap gap-2">
                 {data.keywords_to_add.map((skill: string, i: number) => (
-                  <span key={i} className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-lg text-sm font-medium">
+                  <span key={i} className="px-3 py-1 bg-primary-100 text-primary-800 rounded-lg text-sm font-medium">
                     {skill}
                   </span>
                 ))}
@@ -224,7 +224,7 @@ export function Applications() {
       const email = response.data?.email || 'Email generated successfully';
       setModalState({
         isOpen: true,
-        title: '✉️ Email Template',
+        title: 'Email Template',
         content: email,
         isLoading: false,
       });
@@ -271,9 +271,9 @@ export function Applications() {
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
       saved: 'bg-gray-100 text-gray-700 border-gray-300',
-      applied: 'bg-blue-100 text-blue-700 border-blue-300',
-      interview_scheduled: 'bg-purple-100 text-purple-700 border-purple-300',
-      offer_received: 'bg-green-100 text-green-700 border-green-300',
+      applied: 'bg-primary-100 text-primary-700 border-primary-300',
+      interview_scheduled: 'bg-primary-100 text-primary-700 border-primary-300',
+      offer_received: 'bg-primary-100 text-primary-700 border-primary-300',
       rejected: 'bg-red-100 text-red-700 border-red-300',
     };
     return colors[status] || 'bg-gray-100 text-gray-700';
@@ -308,7 +308,7 @@ export function Applications() {
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 statusFilter === ''
-                  ? 'bg-indigo-600 text-white shadow-lg'
+                  ? 'bg-primary-600 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -318,7 +318,7 @@ export function Applications() {
               onClick={() => setStatusFilter('applied')}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 statusFilter === 'applied'
-                  ? 'bg-blue-600 text-white shadow-lg'
+                  ? 'bg-primary-600 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -328,7 +328,7 @@ export function Applications() {
               onClick={() => setStatusFilter('interview_scheduled')}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 statusFilter === 'interview_scheduled'
-                  ? 'bg-purple-600 text-white shadow-lg'
+                  ? 'bg-primary-600 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -338,7 +338,7 @@ export function Applications() {
               onClick={() => setStatusFilter('offer_received')}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 statusFilter === 'offer_received'
-                  ? 'bg-green-600 text-white shadow-lg'
+                  ? 'bg-primary-600 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -377,7 +377,7 @@ export function Applications() {
             </p>
             <a
               href="/jobs"
-              className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-semibold shadow-lg"
+              className="inline-block px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-semibold shadow-lg"
             >
               Search Jobs
             </a>
@@ -393,7 +393,7 @@ export function Applications() {
                   <div className="flex-1">
                     {/* Job Title & Company */}
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 w-14 h-14 rounded-xl flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                      <div className="bg-gradient-to-br from-primary-500 to-primary-700 w-14 h-14 rounded-xl flex items-center justify-center text-white text-xl font-bold shadow-lg">
                         {app.job?.company?.charAt(0).toUpperCase() || 'J'}
                       </div>
                       <div className="flex-1">
@@ -427,7 +427,7 @@ export function Applications() {
                         {app.status.replace('_', ' ').toUpperCase()}
                       </span>
                       {app.match_score && (
-                        <span className="px-3 py-1 bg-green-50 text-green-700 rounded-lg text-sm font-semibold border border-green-200">
+                        <span className="px-3 py-1 bg-primary-50 text-primary-700 rounded-lg text-sm font-semibold border border-primary-200">
                           {Math.round(app.match_score)}% Match
                         </span>
                       )}
@@ -436,7 +436,7 @@ export function Applications() {
                     {/* Notes */}
                     {app.notes && (
                       <p className="text-sm text-gray-600 mb-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                        📝 {app.notes}
+                        {app.notes}
                       </p>
                     )}
 
@@ -444,21 +444,21 @@ export function Applications() {
                     <div className="flex flex-wrap gap-2 mb-4">
                       <button
                         onClick={() => handleAIAction('cover_letter', app.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-xs font-medium hover:shadow-lg transition-all"
+                        className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-lg text-xs font-medium hover:shadow-lg transition-all"
                       >
                         <FileText size={14} />
                         Cover Letter
                       </button>
                       <button
                         onClick={() => handleAIAction('job_analysis', app.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg text-xs font-medium hover:shadow-lg transition-all"
+                        className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-lg text-xs font-medium hover:shadow-lg transition-all"
                       >
                         <Target size={14} />
                         Job Analysis
                       </button>
                       <button
                         onClick={() => handleAIAction('resume_optimize', app.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-blue-600 text-white rounded-lg text-xs font-medium hover:shadow-lg transition-all"
+                        className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-lg text-xs font-medium hover:shadow-lg transition-all"
                       >
                         <PenTool size={14} />
                         Resume Optimizer
@@ -466,7 +466,7 @@ export function Applications() {
                       {(app.status === 'interview_scheduled' || app.status === 'applied') && (
                         <button
                           onClick={() => handleAIAction('interview_prep', app.id)}
-                          className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-lg text-xs font-medium hover:shadow-lg transition-all"
+                          className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-lg text-xs font-medium hover:shadow-lg transition-all"
                         >
                           <Sparkles size={14} />
                           Interview Prep
@@ -510,7 +510,7 @@ export function Applications() {
                         href={app.job.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                        className="p-2 text-primary-600 hover:bg-primary-50 rounded-lg transition-all"
                         title="View Job"
                       >
                         <ExternalLink size={20} />

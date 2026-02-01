@@ -1,12 +1,14 @@
 """
 IBM watsonx AI Service
-Integration with IBM watsonx for AI-powered features
+Integration with IBM watsonx for AI-powered features using direct HTTP API calls
 """
 import os
 from typing import Dict, List, Any, Optional
 import logging
 from pathlib import Path
 from dotenv import load_dotenv
+import httpx
+import json
 
 # Load .env from backend directory
 env_path = Path(__file__).parent.parent / '.env'
@@ -14,58 +16,107 @@ load_dotenv(dotenv_path=env_path)
 
 logger = logging.getLogger(__name__)
 
-# Try to import IBM watsonx AI library
-try:
-    from ibm_watsonx_ai import Credentials, APIClient
-    from ibm_watsonx_ai.foundation_models import ModelInference
-    WATSONX_AVAILABLE = True
-except ImportError:
-    logger.warning("ibm-watsonx-ai not installed. AI features will use fallback.")
-    WATSONX_AVAILABLE = False
-
 # Configuration
 WATSONX_API_KEY = os.getenv("WATSONX_API_KEY", "")
 WATSONX_URL = os.getenv("WATSONX_URL", "https://us-south.ml.cloud.ibm.com")
 WATSONX_PROJECT_ID = os.getenv("WATSONX_PROJECT_ID", "")
+IBM_IAM_API_KEY = os.getenv("IBM_IAM_API_KEY", "")
 MODEL_ID = "ibm/granite-13b-chat-v2"
 
+# Check if credentials are available
+WATSONX_AVAILABLE = bool(WATSONX_API_KEY and WATSONX_PROJECT_ID)
+if not WATSONX_AVAILABLE:
+    logger.warning("Watson credentials not configured. AI features will use fallback templates.")
 
-def _get_watsonx_client() -> Optional[Any]:
+
+def _get_iam_token() -> Optional[str]:
     """
-    Initialize and return watsonx AI client
+    Get IBM Cloud IAM access token
     
     Returns:
-        ModelInference client or None if not configured
+        Access token or None if failed
+    """
+    if not IBM_IAM_API_KEY:
+        logger.warning("IBM_IAM_API_KEY not configured")
+        return None
+    
+    try:
+        response = httpx.post(
+            "https://iam.cloud.ibm.com/identity/token",
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            data={
+                "grant_type": "urn:ibm:params:oauth:grant-type:apikey",
+                "apikey": IBM_IAM_API_KEY
+            },
+            timeout=30.0
+        )
+        
+        if response.status_code == 200:
+            return response.json().get("access_token")
+        else:
+            logger.error(f"Failed to get IAM token: {response.status_code}")
+            return None
+            
+    except Exception as e:
+        logger.error(f"Error getting IAM token: {e}")
+        return None
+
+
+def _call_watsonx_api(prompt: str, max_tokens: int = 500) -> Optional[str]:
+    """
+    Call watsonx API directly using HTTP
+    
+    Args:
+        prompt: The prompt to send to the model
+        max_tokens: Maximum number of tokens to generate
+        
+    Returns:
+        Generated text or None if failed
     """
     if not WATSONX_AVAILABLE:
         return None
     
-    if not WATSONX_API_KEY or not WATSONX_PROJECT_ID:
-        logger.warning("watsonx credentials not configured")
-        return None
-    
     try:
-        credentials = Credentials(
-            url=WATSONX_URL,
-            api_key=WATSONX_API_KEY
+        # Get IAM token
+        token = _get_iam_token()
+        if not token:
+            logger.warning("Could not get IAM token, using fallback")
+            return None
+        
+        # Make API call
+        url = f"{WATSONX_URL}/ml/v1/text/generation?version=2023-05-29"
+        
+        response = httpx.post(
+            url,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            json={
+                "model_id": MODEL_ID,
+                "input": prompt,
+                "parameters": {
+                    "decoding_method": "greedy",
+                    "max_new_tokens": max_tokens,
+                    "temperature": 0.7,
+                    "repetition_penalty": 1.1
+                },
+                "project_id": WATSONX_PROJECT_ID
+            },
+            timeout=60.0
         )
         
-        client = ModelInference(
-            model_id=MODEL_ID,
-            credentials=credentials,
-            project_id=WATSONX_PROJECT_ID,
-            params={
-                "decoding_method": "greedy",
-                "max_new_tokens": 500,
-                "temperature": 0.7,
-                "repetition_penalty": 1.1
-            }
-        )
-        
-        return client
-        
+        if response.status_code == 200:
+            result = response.json()
+            generated_text = result.get("results", [{}])[0].get("generated_text", "")
+            return generated_text.strip()
+        else:
+            logger.error(f"Watson API error: {response.status_code} - {response.text}")
+            return None
+            
     except Exception as e:
-        logger.error(f"Error initializing watsonx client: {e}")
+        logger.error(f"Error calling Watson API: {e}")
         return None
 
 
@@ -81,8 +132,6 @@ def generate_cover_letter(user_profile: Dict[str, Any], job_posting: Dict[str, A
         Generated cover letter text
     """
     try:
-        client = _get_watsonx_client()
-        
         # Prepare prompt
         skills_str = ", ".join(user_profile.get("skills", [])[:10])
         exp_years = user_profile.get("experience_years", 0)
@@ -106,9 +155,11 @@ Write a concise, professional cover letter (3-4 paragraphs) that:
 
 Cover Letter:"""
 
-        if client:
-            response = client.generate_text(prompt=prompt)
-            cover_letter = response.strip()
+        # Try Watson API first
+        generated_text = _call_watsonx_api(prompt, max_tokens=600)
+        
+        if generated_text:
+            return generated_text
         else:
             # Fallback template if watsonx not available
             cover_letter = f"""Dear Hiring Manager,
@@ -141,8 +192,6 @@ def analyze_rejection(application_data: Dict[str, Any]) -> Dict[str, Any]:
         Dictionary with analysis and recommendations
     """
     try:
-        client = _get_watsonx_client()
-        
         job = application_data.get("job", {})
         user = application_data.get("user", {})
         notes = application_data.get("notes", "")
@@ -161,10 +210,10 @@ Provide a brief analysis (3-4 sentences) covering:
 
 Analysis:"""
 
-        if client:
-            response = client.generate_text(prompt=prompt)
-            analysis_text = response.strip()
-        else:
+        # Try Watson API first
+        analysis_text = _call_watsonx_api(prompt, max_tokens=400)
+        
+        if not analysis_text:
             # Fallback analysis
             analysis_text = f"""Based on the application for {job.get('title', 'this position')}, here are some possible factors:
 
@@ -334,8 +383,6 @@ def suggest_resume_updates(
     Provide resume improvements tailored to a target job.
     """
     try:
-        client = _get_watsonx_client()
-
         missing_skills = sorted(list(set(job_skills) - set(resume_skills)))
         matching_skills = sorted(list(set(job_skills) & set(resume_skills)))
 
@@ -358,11 +405,10 @@ Resume Suggestions:"""
         suggestions: List[str] = []
         summary = ""
 
-        if client:
-            response = client.generate_text(prompt=prompt)
-            raw = response.strip()
-            summary = raw.split("\n")[0] if raw else ""
-            for line in raw.split("\n"):
+        raw_text = _call_watsonx_api(prompt, max_tokens=700)
+        if raw_text:
+            summary = raw_text.split("\n")[0] if raw_text else ""
+            for line in raw_text.split("\n"):
                 clean = line.strip("-• ").strip()
                 if len(clean) > 4:
                     suggestions.append(clean)
@@ -408,8 +454,6 @@ def analyze_job_requirements(job_posting: Dict[str, Any], user_profile: Dict[str
         Dictionary with skill gap analysis
     """
     try:
-        client = _get_watsonx_client()
-        
         job_skills = job_posting.get("skills_required", [])
         user_skills = user_profile.get("skills", [])
         
@@ -434,9 +478,7 @@ Provide:
 
 Analysis:"""
 
-        analysis_text = ""
-        if client:
-            analysis_text = client.generate_text(prompt=prompt).strip()
+        analysis_text = _call_watsonx_api(prompt, max_tokens=600)
         
         result = {
             "matching_skills": matching_skills[:10],
@@ -472,8 +514,6 @@ def optimize_resume(user_profile: Dict[str, Any], job_posting: Dict[str, Any]) -
         Dictionary with optimization suggestions
     """
     try:
-        client = _get_watsonx_client()
-        
         prompt = f"""As a resume expert, analyze this resume for the target job and provide specific improvements:
 
 Target Job: {job_posting.get('title', '')} at {job_posting.get('company', '')}
@@ -490,9 +530,7 @@ Provide 5-7 specific, actionable suggestions to improve the resume for THIS job:
 
 Suggestions:"""
 
-        suggestions_text = ""
-        if client:
-            suggestions_text = client.generate_text(prompt=prompt).strip()
+        suggestions_text = _call_watsonx_api(prompt, max_tokens=600)
         
         # Parse suggestions
         suggestions = []
@@ -538,8 +576,6 @@ def generate_email_template(template_type: str, context: Dict[str, Any]) -> str:
         Generated email text
     """
     try:
-        client = _get_watsonx_client()
-        
         company = context.get("company", "the company")
         role = context.get("role", "the position")
         user_name = context.get("user_name", "Your Name")
@@ -594,9 +630,9 @@ Email:"""
         
         prompt = prompts.get(template_type, prompts["follow_up"])
         
-        if client:
-            email = client.generate_text(prompt=prompt).strip()
-        else:
+        email = _call_watsonx_api(prompt, max_tokens=500)
+        
+        if not email:
             # Fallback templates
             templates = {
                 "follow_up": f"""Subject: Following Up on {role} Application
@@ -662,8 +698,6 @@ def generate_ai_insights(applications: List[Dict[str, Any]], user_profile: Dict[
         Dictionary with insights and recommendations
     """
     try:
-        client = _get_watsonx_client()
-        
         total = len(applications)
         applied = len([a for a in applications if a.get("status") == "applied"])
         interviews = len([a for a in applications if a.get("status") == "interview_scheduled"])
@@ -689,9 +723,7 @@ Provide:
 
 Insights:"""
 
-        insights_text = ""
-        if client:
-            insights_text = client.generate_text(prompt=prompt).strip()
+        insights_text = _call_watsonx_api(prompt, max_tokens=700)
         
         success_rate = round((offers / total * 100) if total > 0 else 0, 1)
         interview_rate = round((interviews / total * 100) if total > 0 else 0, 1)

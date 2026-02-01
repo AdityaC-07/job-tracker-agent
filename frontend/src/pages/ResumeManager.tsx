@@ -67,13 +67,13 @@ export function ResumeManager() {
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-xl shadow p-6">
               <h2 className="text-lg font-semibold mb-4">Upload Resume</h2>
-              <label className="flex flex-col items-center justify-center border-2 border-dashed border-indigo-200 rounded-xl p-6 cursor-pointer hover:bg-indigo-50 transition-colors">
-                <Upload className="text-indigo-600 mb-2" />
+              <label className="flex flex-col items-center justify-center border-2 border-dashed border-primary-200 rounded-xl p-6 cursor-pointer hover:bg-primary-50 transition-colors">
+                <Upload className="text-primary-600 mb-2" />
                 <span className="text-gray-700">Click to upload or drag and drop</span>
                 <span className="text-xs text-gray-500">PDF, DOC, DOCX (max 5MB)</span>
                 <input type="file" className="hidden" accept=".pdf,.doc,.docx" onChange={handleFileChange} />
               </label>
-              {isUploading && <p className="text-sm text-indigo-600 mt-3">Uploading and parsing...</p>}
+              {isUploading && <p className="text-sm text-primary-600 mt-3">Uploading and parsing...</p>}
             </div>
 
             <div className="bg-white rounded-xl shadow p-6">
@@ -93,7 +93,7 @@ export function ResumeManager() {
 
             <div className="bg-white rounded-xl shadow p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Briefcase className="text-indigo-600" />
+                <Briefcase className="text-primary-600" />
                 <h2 className="text-lg font-semibold">Job-Aligned Suggestions</h2>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 mb-4">
@@ -111,7 +111,7 @@ export function ResumeManager() {
                 </select>
                 <button
                   onClick={handleAnalyze}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700"
+                  className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700"
                   disabled={analyzeMutation.isPending || !selectedJobId}
                 >
                   {analyzeMutation.isPending ? 'Analyzing...' : 'Analyze for Job'}
@@ -127,7 +127,7 @@ export function ResumeManager() {
               {suggestions && (
                 <div className="space-y-4">
                   {suggestions.summary && (
-                    <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 text-sm text-indigo-900">
+                    <div className="bg-primary-50 border border-primary-200 rounded-lg p-3 text-sm text-primary-900">
                       {suggestions.summary}
                     </div>
                   )}
@@ -136,7 +136,7 @@ export function ResumeManager() {
                     <h3 className="text-sm font-semibold text-gray-700 mb-2">Missing Skills</h3>
                     <div className="flex flex-wrap gap-2">
                       {(suggestions.missing_skills || []).map((skill: string) => (
-                        <span key={skill} className="px-2 py-1 bg-red-50 text-red-700 text-xs rounded-lg">
+                        <span key={skill} className="px-2 py-1 bg-primary-50 text-primary-700 text-xs rounded-lg">
                           {skill}
                         </span>
                       ))}
@@ -171,24 +171,24 @@ export function ResumeManager() {
             <div className="bg-white rounded-xl shadow p-6">
               <h2 className="text-lg font-semibold mb-4">Analysis Results</h2>
               <div className="space-y-3">
-                <div className="p-3 rounded-lg bg-indigo-50">
+                <div className="p-3 rounded-lg bg-primary-50">
                   <p className="text-xs text-gray-500">Skills Found</p>
-                  <p className="text-xl font-bold text-indigo-700">{skillsCount}</p>
+                  <p className="text-xl font-bold text-primary-700">{skillsCount}</p>
                 </div>
-                <div className="p-3 rounded-lg bg-purple-50">
+                <div className="p-3 rounded-lg bg-primary-50">
                   <p className="text-xs text-gray-500">Experience</p>
-                  <p className="text-xl font-bold text-purple-700">{experienceYears} years</p>
+                  <p className="text-xl font-bold text-primary-700">{experienceYears} years</p>
                 </div>
-                <div className="p-3 rounded-lg bg-green-50">
+                <div className="p-3 rounded-lg bg-primary-50">
                   <p className="text-xs text-gray-500">Education</p>
-                  <p className="text-sm font-semibold text-green-700">{education}</p>
+                  <p className="text-sm font-semibold text-primary-700">{education}</p>
                 </div>
               </div>
             </div>
 
             <div className="bg-white rounded-xl shadow p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="text-indigo-600" />
+                <Sparkles className="text-primary-600" />
                 <h2 className="text-lg font-semibold">Resume Tips</h2>
               </div>
               <ul className="text-sm text-gray-700 space-y-2">
