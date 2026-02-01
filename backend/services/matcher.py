@@ -1,36 +1,43 @@
 """
 Profile and Job Matching Service
-Uses sentence-transformers for semantic matching between user profiles and job postings
+Uses simple keyword-based matching as the ML libraries require heavy dependencies
 """
-import numpy as np
+import hashlib
 from typing import List, Dict, Any, Tuple, Optional
 import logging
 
-try:
-    from sentence_transformers import SentenceTransformer
-    SENTENCE_TRANSFORMERS_AVAILABLE = True
-except ImportError:
-    SENTENCE_TRANSFORMERS_AVAILABLE = False
-
 logger = logging.getLogger(__name__)
 
-_MODEL: Optional["SentenceTransformer"] = None
 
-
-def _get_model() -> "SentenceTransformer":
-    if not SENTENCE_TRANSFORMERS_AVAILABLE:
-        raise ValueError("SentenceTransformers not installed. Install sentence-transformers to enable matching.")
-
-    global _MODEL
-    if _MODEL is None:
-        _MODEL = SentenceTransformer("all-MiniLM-L6-v2")
-
-    return _MODEL
+def _simple_embedding(text: str) -> List[float]:
+    """
+    Create a simple hash-based embedding for text
+    Uses TF-IDF-like approach with keyword matching
+    """
+    # Normalize text
+    text = text.lower()
+    words = text.split()
+    
+    # Simple 128-dimensional embedding based on hash values
+    embedding = [0.0] * 128
+    
+    for word in set(words):
+        # Use hash to distribute words across embedding dimensions
+        hash_val = int(hashlib.md5(word.encode()).hexdigest(), 16)
+        idx = hash_val % 128
+        embedding[idx] += 1.0 / max(1, len(words))
+    
+    # Normalize
+    total = sum(embedding)
+    if total > 0:
+        embedding = [x / total for x in embedding]
+    
+    return embedding
 
 
 def create_profile_embedding(user_profile: Dict[str, Any]) -> List[float]:
     """
-    Create vector embedding for user profile
+    Create vector embedding for user profile using simple text-based hashing
     
     Args:
         user_profile: Dictionary containing user's skills, experience, resume text
@@ -69,20 +76,20 @@ def create_profile_embedding(user_profile: Dict[str, Any]) -> List[float]:
         # Combine all parts
         profile_text = " | ".join(profile_parts)
         
-        # Generate embedding
-        embedding = _get_model().encode(profile_text, convert_to_numpy=True)
+        # Generate simple embedding
+        embedding = _simple_embedding(profile_text)
         
         logger.debug(f"Created profile embedding with {len(embedding)} dimensions")
-        return embedding.tolist()
+        return embedding
         
     except Exception as e:
         logger.error(f"Error creating profile embedding: {e}")
-        return []
+        return [0.0] * 128
 
 
 def create_job_embedding(job_posting: Dict[str, Any]) -> List[float]:
     """
-    Create vector embedding for job posting
+    Create vector embedding for job posting using simple text-based hashing
     
     Args:
         job_posting: Dictionary containing job title, description, requirements
@@ -129,15 +136,15 @@ def create_job_embedding(job_posting: Dict[str, Any]) -> List[float]:
         # Combine all parts
         job_text = " | ".join(job_parts)
         
-        # Generate embedding
-        embedding = _get_model().encode(job_text, convert_to_numpy=True)
+        # Generate simple embedding
+        embedding = _simple_embedding(job_text)
         
         logger.debug(f"Created job embedding with {len(embedding)} dimensions")
-        return embedding.tolist()
+        return embedding
         
     except Exception as e:
         logger.error(f"Error creating job embedding: {e}")
-        return []
+        return [0.0] * 128
 
 
 def calculate_match_score(profile_embedding: List[float], job_embedding: List[float]) -> float:
@@ -155,15 +162,22 @@ def calculate_match_score(profile_embedding: List[float], job_embedding: List[fl
         if not profile_embedding or not job_embedding:
             return 0.0
         
-        # Convert to numpy arrays
-        profile_vec = np.array(profile_embedding).reshape(1, -1)
-        job_vec = np.array(job_embedding).reshape(1, -1)
+        # Ensure same length
+        min_len = min(len(profile_embedding), len(job_embedding))
+        profile_vec = profile_embedding[:min_len]
+        job_vec = job_embedding[:min_len]
         
-        # Calculate cosine similarity
-        denom = (np.linalg.norm(profile_vec) * np.linalg.norm(job_vec))
+        # Calculate cosine similarity manually
+        dot_product = sum(p * j for p, j in zip(profile_vec, job_vec))
+        
+        profile_norm = sum(p * p for p in profile_vec) ** 0.5
+        job_norm = sum(j * j for j in job_vec) ** 0.5
+        
+        denom = profile_norm * job_norm
         if denom == 0:
             return 0.0
-        similarity = float(np.dot(profile_vec, job_vec.T) / denom)
+        
+        similarity = dot_product / denom
         
         # Convert to 0-100 scale
         # Cosine similarity is between -1 and 1, but typically 0 to 1 for our use case
