@@ -13,6 +13,14 @@ export interface User {
   skills: string[];
   experience_years: number;
   education?: Education;
+  resume_text?: string;
+  work_experiences?: Array<{
+    title?: string;
+    company?: string;
+    start_date?: string;
+    end_date?: string;
+    current?: boolean;
+  }>;
   target_roles?: string[];
   target_locations?: string[];
   preferences?: UserPreferences;
@@ -228,6 +236,7 @@ export const apiClient = {
   
   // Analytics
   getDashboardAnalytics: () => api.get<DashboardStats>('/api/analytics/dashboard'),
+  getDashboardStats: () => api.get<DashboardStats>('/api/analytics/dashboard'),
   
   getTimeline: (days?: number) => api.get('/api/analytics/timeline', { params: { days } }),
   
@@ -237,6 +246,25 @@ export const apiClient = {
     api.get(`/api/analytics/company-insights/${encodeURIComponent(companyName)}`),
   
   getSuccessByCompany: () => api.get('/api/analytics/success-by-company'),
+
+  // AI Features
+  analyzeJob: (jobId: string) => 
+    api.post(`/api/ai/analyze-job/${jobId}`),
+  
+  optimizeResume: (jobId: string) =>
+    api.post('/api/ai/optimize-resume', null, { params: { job_id: jobId } }),
+
+  getResumeSuggestions: (jobId: string) =>
+    api.post('/api/ai/resume-suggestions', null, { params: { job_id: jobId } }),
+  
+  generateEmailTemplate: (templateType: 'follow_up' | 'thank_you' | 'negotiation', applicationId: string) =>
+    api.post('/api/ai/email-template', null, { params: { template_type: templateType, application_id: applicationId } }),
+  
+  getAIInsights: () =>
+    api.get('/api/ai/insights'),
+  
+  getInterviewPrep: (applicationId: string) =>
+    api.post(`/api/ai/interview-prep/${applicationId}`),
 };
 
 export default api;

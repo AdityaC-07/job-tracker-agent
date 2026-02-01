@@ -7,8 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
 
-from backend.config.database import connect_db, disconnect_db, health_check
-from backend.api.routes import users, jobs, applications, analytics
+from config.database import connect_db, disconnect_db, health_check
+from api.routes import users, jobs, applications, analytics, ai
 
 # Configure logging
 logging.basicConfig(
@@ -77,6 +77,7 @@ app.include_router(users.router, prefix="/api")
 app.include_router(jobs.router, prefix="/api")
 app.include_router(applications.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
+app.include_router(ai.router, prefix="/api")
 
 
 # Root endpoint

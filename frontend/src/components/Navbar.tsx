@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { useSidebar } from '../context/SidebarContext';
-import { LogOut, Menu, X, Heart, Briefcase, BarChart3, LayoutDashboard, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LogOut, Menu, X, Heart, Briefcase, BarChart3, LayoutDashboard, Search, ChevronLeft, ChevronRight, FileText, Sparkles } from 'lucide-react';
 
 export function Navbar() {
   const { logout, isAuthenticated, user } = useAuthContext();
@@ -92,6 +92,28 @@ export function Navbar() {
           >
             <BarChart3 size={22} />
             {!isCollapsed && <span>Analytics</span>}
+          </Link>
+
+          {!isCollapsed && (
+            <div className="pt-4">
+              <p className="text-xs font-semibold text-gray-400 uppercase px-4 mb-2">AI Tools</p>
+            </div>
+          )}
+
+          <Link
+            to="/resume"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+          >
+            <FileText size={22} />
+            {!isCollapsed && <span>Resume</span>}
+          </Link>
+
+          <Link
+            to="/interview-prep"
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors font-medium"
+          >
+            <Sparkles size={22} />
+            {!isCollapsed && <span>Interview Prep</span>}
           </Link>
         </nav>
       </aside>

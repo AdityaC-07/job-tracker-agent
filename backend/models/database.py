@@ -3,27 +3,22 @@ MongoDB Pydantic Models for Job Tracker Application
 Defines User, JobPosting, Application, and CompanyInsights models
 """
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Annotated
 from enum import Enum
-from pydantic import BaseModel, Field, EmailStr, validator
+from pydantic import BaseModel, Field, EmailStr, field_validator, BeforeValidator
 from bson import ObjectId
 
 
-class PyObjectId(ObjectId):
-    """Custom ObjectId type for Pydantic"""
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid ObjectId")
+def validate_object_id(v: Any) -> ObjectId:
+    """Validator for ObjectId fields"""
+    if isinstance(v, ObjectId):
+        return v
+    if ObjectId.is_valid(v):
         return ObjectId(v)
+    raise ValueError("Invalid ObjectId")
 
-    @classmethod
-    def __get_pydantic_json_schema__(cls, field_schema):
-        field_schema.update(type="string")
+
+PyObjectId = Annotated[ObjectId, BeforeValidator(validate_object_id)]
 
 
 class ApplicationStatus(str, Enum):
@@ -150,10 +145,11 @@ class Application(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    @validator('applied_date', always=True)
-    def set_applied_date(cls, v, values):
+    @field_validator('applied_date')
+    @classmethod
+    def set_applied_date(cls, v, info):
         """Auto-set applied_date when status is APPLIED"""
-        if values.get('status') == ApplicationStatus.APPLIED and not v:
+        if info.data.get('status') == ApplicationStatus.APPLIED and not v:
             return datetime.utcnow()
         return v
 

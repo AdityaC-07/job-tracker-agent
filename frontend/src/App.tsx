@@ -7,17 +7,13 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { JobSearch } from './pages/JobSearch';
 import { SavedJobs } from './pages/SavedJobs';
+import { Dashboard } from './pages/Dashboard';
+import { Applications } from './pages/Applications';
+import { ResumeManager } from './pages/ResumeManager';
+import { InterviewPrep } from './pages/InterviewPrep';
 import { Navbar } from './components/Navbar';
 
-// Placeholder components - will be created
-const Dashboard = () => {
-  const { isCollapsed } = useSidebar();
-  return <div className={`min-h-screen bg-gray-50 pt-16 p-8 transition-all duration-300 ${isCollapsed ? 'pl-20' : 'pl-64'}`}><h1 className="text-3xl font-bold mb-6">Dashboard</h1><div className="grid grid-cols-4 gap-4 mb-8"><div className="bg-white p-6 rounded-lg shadow"><h3 className="text-gray-500 text-sm">Total Applications</h3><p className="text-3xl font-bold">0</p></div><div className="bg-white p-6 rounded-lg shadow"><h3 className="text-gray-500 text-sm">Applied</h3><p className="text-3xl font-bold">0</p></div><div className="bg-white p-6 rounded-lg shadow"><h3 className="text-gray-500 text-sm">Interviews</h3><p className="text-3xl font-bold">0</p></div><div className="bg-white p-6 rounded-lg shadow"><h3 className="text-gray-500 text-sm">Offers</h3><p className="text-3xl font-bold">0</p></div></div></div>;
-};
-const ApplicationTracker = () => {
-  const { isCollapsed } = useSidebar();
-  return <div className={`min-h-screen bg-gray-50 pt-16 p-8 transition-all duration-300 ${isCollapsed ? 'pl-20' : 'pl-64'}`}><h1 className="text-3xl font-bold mb-6">Application Tracker</h1><div className="bg-white p-6 rounded-lg shadow"><p className="text-gray-600">Track your job applications</p></div></div>;
-};
+// Placeholder component
 const Analytics = () => {
   const { isCollapsed } = useSidebar();
   return <div className={`min-h-screen bg-gray-50 pt-16 p-8 transition-all duration-300 ${isCollapsed ? 'pl-20' : 'pl-64'}`}><h1 className="text-3xl font-bold mb-6">Analytics</h1><div className="bg-white p-6 rounded-lg shadow"><p className="text-gray-600">View your application analytics</p></div></div>;
@@ -73,7 +69,7 @@ function App() {
                     path="/applications"
                     element={
                       <PrivateRoute>
-                        <ApplicationTracker />
+                        <Applications />
                       </PrivateRoute>
                     }
                   />
@@ -82,6 +78,22 @@ function App() {
                     element={
                       <PrivateRoute>
                         <Analytics />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/resume"
+                    element={
+                      <PrivateRoute>
+                        <ResumeManager />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/interview-prep"
+                    element={
+                      <PrivateRoute>
+                        <InterviewPrep />
                       </PrivateRoute>
                     }
                   />

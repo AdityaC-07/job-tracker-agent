@@ -12,16 +12,16 @@ import os
 import tempfile
 import logging
 
-from backend.models.database import User, Education, UserPreferences
-from backend.config.database import get_users_collection
-from backend.auth.jwt_handler import (
+from models.database import User, Education, UserPreferences
+from config.database import get_users_collection
+from auth.jwt_handler import (
     create_access_token, 
     hash_password, 
     verify_password, 
     get_current_user
 )
-from backend.services.resume_parser import parse_resume
-from backend.services.matcher import create_profile_embedding
+from services.resume_parser import parse_resume
+from services.matcher import create_profile_embedding
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -161,9 +161,28 @@ async def get_current_user_profile(current_user_id: str = Depends(get_current_us
     try:
         users_collection = await get_users_collection()
         
-        user = await users_collection.find_one({"_id": ObjectId(current_user_id)})
+        logger.info(f"Fetching user profile for user_id: {current_user_id}")
+        
+        # Check if the ID is valid
+        try:
+            obj_id = ObjectId(current_user_id)
+        except Exception as e:
+            logger.error(f"Invalid ObjectId: {current_user_id}, error: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid user ID format"
+            )
+        
+        user = await users_collection.find_one({"_id": obj_id})
         
         if not user:
+            # Debug: Let's check if the user exists with any ID format
+            user_count = await users_collection.count_documents({})
+            # Get the actual user IDs in the database
+            all_users = []
+            async for u in users_collection.find({}, {"_id": 1, "email": 1}):
+                all_users.append({"id": str(u["_id"]), "email": u.get("email", "N/A")})
+            logger.error(f"User not found in database: {current_user_id}, Total users in DB: {user_count}, Actual users: {all_users}")
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="User not found"
@@ -301,7 +320,8 @@ async def upload_resume(
                     "experience_years": parsed_data.get("experience_years", 0),
                     "education": parsed_data.get("education", {}),
                     "email": parsed_data.get("email"),
-                    "phone": parsed_data.get("phone")
+                    "phone": parsed_data.get("phone"),
+                    "resume_text_length": len(parsed_data.get("resume_text", "").strip())
                 }
             }
             
@@ -312,6 +332,12 @@ async def upload_resume(
         
     except HTTPException:
         raise
+    except ValueError as e:
+        logger.error(f"Error uploading resume: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
     except Exception as e:
         logger.error(f"Error uploading resume: {e}")
         raise HTTPException(

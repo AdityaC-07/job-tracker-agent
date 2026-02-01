@@ -5,9 +5,19 @@ Extracts structured data from PDF and DOCX resume files
 import re
 from typing import Dict, List, Optional, Any
 from datetime import datetime
-import fitz  # PyMuPDF
-from docx import Document
 import logging
+
+try:
+    import fitz  # PyMuPDF
+    FITZ_AVAILABLE = True
+except ImportError:
+    FITZ_AVAILABLE = False
+
+try:
+    from docx import Document
+    DOCX_AVAILABLE = True
+except ImportError:
+    DOCX_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -64,15 +74,23 @@ def parse_pdf(file_path: str) -> str:
     Returns:
         Extracted text content
     """
+    if not FITZ_AVAILABLE:
+        raise ValueError("PDF parsing is unavailable. Install PyMuPDF to enable it.")
+
     try:
         doc = fitz.open(file_path)
-        text = ""
-        
+        text_parts = []
+
         for page in doc:
-            text += page.get_text()
-        
+            page_text = page.get_text()
+            if not page_text.strip():
+                blocks = page.get_text("blocks")
+                block_text = " ".join([block[4] for block in blocks if len(block) > 4])
+                page_text = block_text
+            text_parts.append(page_text)
+
         doc.close()
-        return text
+        return "\n".join(text_parts)
         
     except Exception as e:
         logger.error(f"Error parsing PDF: {e}")
@@ -89,6 +107,9 @@ def parse_docx(file_path: str) -> str:
     Returns:
         Extracted text content
     """
+    if not DOCX_AVAILABLE:
+        raise ValueError("DOCX parsing is unavailable. Install python-docx to enable it.")
+
     try:
         doc = Document(file_path)
         text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
@@ -326,6 +347,14 @@ def parse_resume(file_path: str, file_type: str) -> Dict[str, Any]:
         else:
             raise ValueError(f"Unsupported file type: {file_type}")
         
+        text_length = len(text.strip())
+        logger.info(f"Extracted resume text length: {text_length}")
+
+        if text_length < 50:
+            raise ValueError(
+                "No readable text found in the resume. Please upload a text-based PDF or a DOCX file."
+            )
+
         # Extract all information
         result = {
             "resume_text": text,

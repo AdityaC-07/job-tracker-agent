@@ -3,15 +3,29 @@ Profile and Job Matching Service
 Uses sentence-transformers for semantic matching between user profiles and job postings
 """
 import numpy as np
-from typing import List, Dict, Any, Tuple
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
+from typing import List, Dict, Any, Tuple, Optional
 import logging
+
+try:
+    from sentence_transformers import SentenceTransformer
+    SENTENCE_TRANSFORMERS_AVAILABLE = True
+except ImportError:
+    SENTENCE_TRANSFORMERS_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
-# Load model (lightweight and efficient)
-model = SentenceTransformer('all-MiniLM-L6-v2')
+_MODEL: Optional["SentenceTransformer"] = None
+
+
+def _get_model() -> "SentenceTransformer":
+    if not SENTENCE_TRANSFORMERS_AVAILABLE:
+        raise ValueError("SentenceTransformers not installed. Install sentence-transformers to enable matching.")
+
+    global _MODEL
+    if _MODEL is None:
+        _MODEL = SentenceTransformer("all-MiniLM-L6-v2")
+
+    return _MODEL
 
 
 def create_profile_embedding(user_profile: Dict[str, Any]) -> List[float]:
@@ -56,7 +70,7 @@ def create_profile_embedding(user_profile: Dict[str, Any]) -> List[float]:
         profile_text = " | ".join(profile_parts)
         
         # Generate embedding
-        embedding = model.encode(profile_text, convert_to_numpy=True)
+        embedding = _get_model().encode(profile_text, convert_to_numpy=True)
         
         logger.debug(f"Created profile embedding with {len(embedding)} dimensions")
         return embedding.tolist()
@@ -116,7 +130,7 @@ def create_job_embedding(job_posting: Dict[str, Any]) -> List[float]:
         job_text = " | ".join(job_parts)
         
         # Generate embedding
-        embedding = model.encode(job_text, convert_to_numpy=True)
+        embedding = _get_model().encode(job_text, convert_to_numpy=True)
         
         logger.debug(f"Created job embedding with {len(embedding)} dimensions")
         return embedding.tolist()
@@ -146,7 +160,10 @@ def calculate_match_score(profile_embedding: List[float], job_embedding: List[fl
         job_vec = np.array(job_embedding).reshape(1, -1)
         
         # Calculate cosine similarity
-        similarity = cosine_similarity(profile_vec, job_vec)[0][0]
+        denom = (np.linalg.norm(profile_vec) * np.linalg.norm(job_vec))
+        if denom == 0:
+            return 0.0
+        similarity = float(np.dot(profile_vec, job_vec.T) / denom)
         
         # Convert to 0-100 scale
         # Cosine similarity is between -1 and 1, but typically 0 to 1 for our use case

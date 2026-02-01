@@ -6,7 +6,7 @@ import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSidebar } from '../context/SidebarContext';
 
 interface Job {
-  _id: string;
+  id: string;
   title: string;
   company: string;
   location: string;
@@ -63,6 +63,7 @@ export function JobSearch() {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
     },
     onError: (error: any) => {
+      console.error('Application creation error:', error);
       toast.error(error.message || 'Failed to create application');
     },
   });
@@ -125,10 +126,13 @@ export function JobSearch() {
   const handleApplySubmit = async () => {
     if (!applyingJobId) return;
     
+    console.log('Submitting application for job:', applyingJobId);
+    console.log('Notes:', applyNotes);
+    
     createApplicationMutation.mutate({
       job_id: applyingJobId,
       status: 'applied',
-      notes: applyNotes,
+      notes: applyNotes || undefined,
     });
   };
 
@@ -274,7 +278,7 @@ export function JobSearch() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
               {paginatedJobs.map((job, index) => (
                 <div
-                  key={job._id}
+                  key={job.id}
                   className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-indigo-200 relative group"
                 >
                   {/* Top Badge */}
@@ -288,9 +292,9 @@ export function JobSearch() {
 
                   {/* Save Button */}
                   <button
-                    onClick={() => toggleSaveJob(job._id)}
+                    onClick={() => toggleSaveJob(job.id)}
                     className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-all ${
-                      savedJobs.has(job._id)
+                      savedJobs.has(job.id)
                         ? 'bg-red-500 text-white shadow-lg scale-110'
                         : 'bg-white/80 text-gray-400 hover:text-red-500 hover:bg-white shadow-md'
                     }`}
@@ -358,7 +362,7 @@ export function JobSearch() {
                     {/* Actions */}
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleApplyClick(job._id)}
+                        onClick={() => handleApplyClick(job.id)}
                         disabled={createApplicationMutation.isPending}
                         className="flex-1 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 font-semibold text-sm shadow-md hover:shadow-lg transition-all"
                       >

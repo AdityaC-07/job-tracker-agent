@@ -1,6 +1,7 @@
 """
 Job API Service
 Integrates with multiple job search APIs: Adzuna, JSearch (RapidAPI), The Muse
+Updated: Fixed pagination issues
 """
 import os
 from typing import List, Dict, Optional, Any
@@ -8,9 +9,12 @@ import httpx
 import asyncio
 from datetime import datetime
 import logging
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load .env from backend directory
+env_path = Path(__file__).parent.parent / '.env'
+load_dotenv(dotenv_path=env_path)
 
 logger = logging.getLogger(__name__)
 
@@ -165,7 +169,7 @@ async def search_themuse(category: str = "", location: str = "", page: int = 0, 
     Args:
         category: Job category
         location: Location filter
-        page: Page number
+        page: Page number (unused - The Muse API doesn't support pagination reliably)
         page_size: Number of results per page
         
     Returns:
@@ -175,7 +179,6 @@ async def search_themuse(category: str = "", location: str = "", page: int = 0, 
         params = {
             "category": category,
             "location": location,
-            "page": page,
             "descending": "true"
         }
         
@@ -240,18 +243,22 @@ async def aggregate_from_all_sources(keywords: str, location: str = "", max_resu
         Combined list of jobs from all sources
     """
     logger.info(f"Aggregating jobs from all sources: keywords='{keywords}', location='{location}'")
+    logger.info(f"API Keys configured - Adzuna: {bool(ADZUNA_APP_ID and ADZUNA_API_KEY)}, JSearch: {bool(JSEARCH_API_KEY)}")
     
     # Create tasks for parallel API calls
     tasks = []
     
     if ADZUNA_APP_ID and ADZUNA_API_KEY:
+        logger.info("Adding Adzuna search to tasks")
         tasks.append(search_adzuna(keywords, location, results_per_page=20))
     
     if JSEARCH_API_KEY:
+        logger.info("Adding JSearch search to tasks")
         tasks.append(search_jsearch(keywords, location, num_pages=1))
     
-    # The Muse doesn't require API key
-    tasks.append(search_themuse(keywords, location, page_size=20))
+    # The Muse doesn't require API key but needs keywords as category
+    logger.info("Adding The Muse search to tasks")
+    tasks.append(search_themuse(category=keywords, location=location, page_size=20))
     
     # Execute all searches in parallel
     results = await asyncio.gather(*tasks, return_exceptions=True)
