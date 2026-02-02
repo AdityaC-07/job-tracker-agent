@@ -3,6 +3,10 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
+# Build argument for API URL
+ARG VITE_API_URL=https://job-tracker-backend.25rpaifsnzhb.jp-osa.codeengine.appdomain.cloud
+ENV VITE_API_URL=$VITE_API_URL
+
 # Copy package files
 COPY package*.json ./
 
