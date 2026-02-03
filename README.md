@@ -487,7 +487,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Agniv Dutta** - GitHub: [@agniv-dutta](https://github.com/agniv-dutta)
 
 **Enhancement & Deployment by**
-- **Aditya Choudhuri** - GitHub: [@adityac18](https://github.com/adityac18)
+- **Aditya Choudhuri** - GitHub: [@AdityaC-07](https://github.com/AdityaC-07)
   - 🚀 Watson AI integration fixes and HTTP API migration
   - ☁️ Full-stack deployment to IBM Cloud Code Engine
   - 🔧 Docker containerization and build optimization
@@ -496,7 +496,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Repository Forks**
 - Original: [agniv-dutta/job-tracker-agent](https://github.com/agniv-dutta/job-tracker-agent)
-- Enhanced Fork: [adityac18/job-tracker-agent](https://github.com/adityac18/job-tracker-agent)
+- Enhanced Fork: [adityac18/job-tracker-agent](https://github.com/AdityaC-07/job-tracker-agent)
 
 ---
 
@@ -513,7 +513,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Support
 
-For support, email agnivkdutta@gmail.com or open an issue on GitHub.
+For support, email choudhuri.aditya7@gmail.com or open an issue on GitHub.
 
 ---
 
