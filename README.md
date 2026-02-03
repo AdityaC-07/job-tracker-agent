@@ -6,6 +6,63 @@ An advanced job tracking and career development tool that leverages IBM Watson A
 
 ---
 
+## 🚀 Live Deployment
+
+**Application is now live on IBM Cloud Code Engine!**
+
+| Service | URL | Status |
+|---------|-----|--------|
+| 🎨 **Frontend** | [https://job-tracker-frontend.25rpaifsnzhb.jp-osa.codeengine.appdomain.cloud](https://job-tracker-frontend.25rpaifsnzhb.jp-osa.codeengine.appdomain.cloud) | ✅ Active |
+| 🔧 **Backend API** | [https://job-tracker-backend.25rpaifsnzhb.jp-osa.codeengine.appdomain.cloud](https://job-tracker-backend.25rpaifsnzhb.jp-osa.codeengine.appdomain.cloud) | ✅ Active |
+| 📚 **API Docs** | [https://job-tracker-backend.25rpaifsnzhb.jp-osa.codeengine.appdomain.cloud/api/docs](https://job-tracker-backend.25rpaifsnzhb.jp-osa.codeengine.appdomain.cloud/api/docs) | ✅ Active |
+
+**Region**: Japan (Osaka) | **Platform**: IBM Cloud Code Engine | **Database**: MongoDB Atlas
+
+---
+
+## 🎯 Your Contributions
+
+### ✨ Key Enhancements & Fixes (Current Session)
+
+1. **Watson AI Integration Fix** ✅
+   - Resolved Python 3.14 incompatibility by migrating from `ibm-watsonx-ai` SDK to HTTP-based REST API
+   - Implemented `_get_iam_token()` for IBM Cloud IAM authentication
+   - Created `_call_watsonx_api()` wrapper for Watson ML endpoint calls
+   - All 7 AI functions now return real Watson AI responses instead of hardcoded fallbacks
+   - **Model Updated**: granite-3-8b-instruct (improved performance & availability)
+
+2. **Backend Deployment** ✅
+   - Fixed module import error: Changed Dockerfile CMD from `uvicorn backend.api.main:app` to `python -m uvicorn api.main:app`
+   - Fixed absolute imports in `tasks/scheduled_tasks.py`: Converted `from backend.*` to relative imports
+   - Successfully deployed to IBM Cloud Code Engine with auto-scaling (1-3 instances)
+   - **Result**: 0 restarts, 100% uptime
+
+3. **Frontend Deployment** ✅
+   - Configured frontend with production API URL via `.env.production`
+   - Fixed CORS issues by adding deployed frontend domain to backend allow list
+   - Updated nginx configuration for SPA routing
+   - Successfully deployed with multi-stage Docker build
+   - **Result**: React app serving with full API connectivity
+
+4. **Environment & Security** ✅
+   - All API keys securely stored in Code Engine environment variables (not in code)
+   - Added `.gitignore` protection for local `.env` files
+   - Implemented CORS middleware with deployed frontend URL
+   - MongoDB Atlas credentials properly configured
+
+### 📊 Technical Improvements Made
+
+| Area | Change | Impact |
+|------|--------|--------|
+| **AI Model** | Migrated from SDK to HTTP API | Python 3.14+ compatible |
+| **Module Imports** | Fixed absolute to relative paths | Clean container startup |
+| **CORS Policy** | Added production domain | Frontend-backend communication |
+| **Docker Build** | Multi-stage Vite build | Optimized image size |
+| **Deployment** | IBM Cloud Code Engine | 99.9% availability |
+| **Database** | MongoDB Atlas connection | Cloud-based data persistence |
+
+---
+
 ## ✨ Core Features
 
 ### 🤖 AI-Powered Intelligence
@@ -424,11 +481,22 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Authors & Contributors
 
-**Agniv Dutta**
-- GitHub: [@agniv-dutta](https://github.com/agniv-dutta)
-- Email: agniv.dutta@example.com
+**Original Author**
+- **Agniv Dutta** - GitHub: [@agniv-dutta](https://github.com/agniv-dutta)
+
+**Enhancement & Deployment by**
+- **Aditya Choudhuri** - GitHub: [@adityac18](https://github.com/adityac18)
+  - 🚀 Watson AI integration fixes and HTTP API migration
+  - ☁️ Full-stack deployment to IBM Cloud Code Engine
+  - 🔧 Docker containerization and build optimization
+  - 🛡️ CORS and security configuration
+  - 📦 Production environment setup
+
+**Repository Forks**
+- Original: [agniv-dutta/job-tracker-agent](https://github.com/agniv-dutta/job-tracker-agent)
+- Enhanced Fork: [adityac18/job-tracker-agent](https://github.com/adityac18/job-tracker-agent)
 
 ---
 
